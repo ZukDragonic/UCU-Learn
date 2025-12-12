@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class playerManagerScript : MonoBehaviour
 {
     public float spd;
     private Vector3 moveDir;
@@ -10,6 +10,7 @@ public class NewBehaviourScript : MonoBehaviour
     public KeyCode atkKey;
     public Animator anim;
     public GameObject weapon1;
+    public GameObject attackAnchor;
     private GameObject weapon1Anchor;
     public GameObject weapon2;
     private GameObject weapon2Anchor;
@@ -44,11 +45,17 @@ public class NewBehaviourScript : MonoBehaviour
         }
         if (Input.GetKey(atkKey))
         {
+            if(anim.GetCurrentAnimatorStateInfo(1).IsName("Empty"))
+            {
+                anim.Play("Attack1", 1);
+            }
             atkGraceTimer = 0f;
+            attackAnchor.SetActive(true);
             anim.SetBool("isAttacking", true);
         }
         if (atkGraceTimer > atkGracePeriod)
         {
+            attackAnchor.SetActive(false);
             anim.SetBool("isAttacking", false);
         }
         else
