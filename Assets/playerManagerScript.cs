@@ -5,14 +5,16 @@ using UnityEngine;
 public class NewBehaviourScript : MonoBehaviour
 {
     public float spd;
-    public KeyCode atkKey;
-    public KeyCode blockKey;
     private Vector3 moveDir;
 
+    public KeyCode atkKey;
+    public Animator anim;
     public GameObject weapon1;
     private GameObject weapon1Anchor;
     public GameObject weapon2;
     private GameObject weapon2Anchor;
+    public float atkGracePeriod;
+    private float atkGraceTimer;
 
     private void Start()
     {
@@ -31,5 +33,27 @@ public class NewBehaviourScript : MonoBehaviour
         moveDir = x * transform.right + z * transform.forward;
 
         transform.position += moveDir * spd * Time.deltaTime;
+
+        if (moveDir != Vector3.zero)
+        {
+            anim.SetBool("isRunning", true);
+        }
+        else
+        {
+            anim.SetBool("isRunning", false);
+        }
+        if (Input.GetKey(atkKey))
+        {
+            atkGraceTimer = 0f;
+            anim.SetBool("isAttacking", true);
+        }
+        if (atkGraceTimer > atkGracePeriod)
+        {
+            anim.SetBool("isAttacking", false);
+        }
+        else
+        {
+            atkGraceTimer += Time.deltaTime;
+        }
     }
 }
